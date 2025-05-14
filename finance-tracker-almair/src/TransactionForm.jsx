@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import Form from "./Form";
+import TransactionForm from "./TransactionForm";
 import TransactionList from "./TransactionList";
 
-function App() {
+function TransactionForm() {
   const [transactions, setTransactions] = useState([]);
 
   // 🔄 Ambil dari localStorage saat pertama kali aplikasi dimuat
@@ -40,4 +40,4 @@ function App() {
   );
 }
 
-export default App;
+export default TransactionForm;
