@@ -8,7 +8,6 @@ function App () {
       <div className="mt-8 space-x-4">
         <Link to="/form" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Do Transactions</Link>
         <Link to="/summary" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Summary</Link>
-        <Link to="/transactions" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Transactions List</Link>
       </div>
     </div>
   );
