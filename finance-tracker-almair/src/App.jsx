@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import Form from "./Form";
+import TransactionList from "./TransactionList";
 
 function App() {
   const [transactions, setTransactions] = useState([]);
 
-  // Ambil data dari localStorage saat pertama kali dimuat
+  // 🔄 Ambil dari localStorage saat pertama kali aplikasi dimuat
   useEffect(() => {
     const savedTransactions = localStorage.getItem("transactions");
     if (savedTransactions) {
@@ -12,25 +13,29 @@ function App() {
     }
   }, []);
 
-  // Simpan ke localStorage setiap kali transaksi berubah
+  // 💾 Simpan ke localStorage setiap kali data transaksi berubah
   useEffect(() => {
     localStorage.setItem("transactions", JSON.stringify(transactions));
   }, [transactions]);
 
-  const handleAddTransaction = (transaction) => {
-    setTransactions((prev) => [...prev, transaction]);
+  // ➕ Tambah transaksi baru
+  const handleAddTransaction = (newTransaction) => {
+    setTransactions((prev) => [...prev, newTransaction]);
+  };
+
+  // ❌ Hapus transaksi berdasarkan ID
+  const handleDeleteTransaction = (id) => {
+    const updated = transactions.filter((t) => t.id !== id);
+    setTransactions(updated);
   };
 
   return (
-    <div className="p-4">
+    <div className="p-4 max-w-xl mx-auto">
       <Form onAddTransaction={handleAddTransaction} />
-      <ul className="mt-6 space-y-2">
-        {transactions.map((t) => (
-          <li key={t.id} className="border p-2 rounded shadow">
-            {t.description} - Rp{t.amount.toLocaleString()} ({t.type})
-          </li>
-        ))}
-      </ul>
+      <TransactionList
+        transactions={transactions}
+        onDeleteTransaction={handleDeleteTransaction}
+      />
     </div>
   );
 }
