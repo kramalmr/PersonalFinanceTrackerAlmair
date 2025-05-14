@@ -4,30 +4,15 @@ import TransactionList from "./TransactionList";
 import { Link } from "react-router-dom";
 
 function TransactionForm() {
-  const [transactions, setTransactions] = useState([]);
-  const [pemasukan, setPemasukan] = useState(0);
-  const [pengeluaran, setPengeluaran] = useState(0);
-
-  useEffect(() => {
-    const savedTransactions = localStorage.getItem("transactions");
-    const savedPemasukan = localStorage.getItem("pemasukan");
-    const savedPengeluaran = localStorage.getItem("pengeluaran");
-    if (savedTransactions) {
-      setTransactions(JSON.parse(savedTransactions));
-    } else {
-      localStorage.setItem("transactions", JSON.stringify([]));
-    }
-    if (savedPemasukan) {
-      setPemasukan(JSON.parse(savedPemasukan));
-    } else {
-      localStorage.setItem("pemasukan", JSON.stringify(0));
-    }
-    if (savedPengeluaran) {
-      setPengeluaran(JSON.parse(savedPengeluaran));
-    } else {
-      localStorage.setItem("pengeluaran", JSON.stringify(0));
-    }
-  }, []);
+  const [transactions, setTransactions] = useState(
+    JSON.parse(localStorage.getItem("transactions")) || []
+  );
+  const [pemasukan, setPemasukan] = useState(
+    JSON.parse(localStorage.getItem("pemasukan")) || 0
+  );
+  const [pengeluaran, setPengeluaran] = useState(
+    JSON.parse(localStorage.getItem("pengeluaran")) || 0
+  );
 
   useEffect(() => {
     localStorage.setItem("transactions", JSON.stringify(transactions));
