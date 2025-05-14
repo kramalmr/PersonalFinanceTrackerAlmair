@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import TransactionForm from "./TransactionForm";
+import Form from "./Form";
 import TransactionList from "./TransactionList";
 
 function TransactionForm() {
