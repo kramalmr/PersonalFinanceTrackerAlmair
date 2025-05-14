@@ -1,29 +1,49 @@
 import { useState, useEffect } from "react";
 import Form from "./Form";
 import TransactionList from "./TransactionList";
+import { Link } from "react-router-dom";
 
 function TransactionForm() {
   const [transactions, setTransactions] = useState([]);
+  const [pemasukan, setPemasukan] = useState(0);
+  const [pengeluaran, setPengeluaran] = useState(0);
 
-  // 🔄 Ambil dari localStorage saat pertama kali aplikasi dimuat
   useEffect(() => {
     const savedTransactions = localStorage.getItem("transactions");
+    const savedPemasukan = localStorage.getItem("pemasukan");
+    const savedPengeluaran = localStorage.getItem("pengeluaran");
     if (savedTransactions) {
       setTransactions(JSON.parse(savedTransactions));
+    } else {
+      localStorage.setItem("transactions", JSON.stringify([]));
+    }
+    if (savedPemasukan) {
+      setPemasukan(JSON.parse(savedPemasukan));
+    } else {
+      localStorage.setItem("pemasukan", JSON.stringify(0));
+    }
+    if (savedPengeluaran) {
+      setPengeluaran(JSON.parse(savedPengeluaran));
+    } else {
+      localStorage.setItem("pengeluaran", JSON.stringify(0));
     }
   }, []);
 
-  // 💾 Simpan ke localStorage setiap kali data transaksi berubah
   useEffect(() => {
     localStorage.setItem("transactions", JSON.stringify(transactions));
-  }, [transactions]);
+    localStorage.setItem("pemasukan", JSON.stringify(pemasukan));
+    localStorage.setItem("pengeluaran", JSON.stringify(pengeluaran));
+  }, [transactions, pemasukan, pengeluaran]);
 
-  // ➕ Tambah transaksi baru
   const handleAddTransaction = (newTransaction) => {
     setTransactions((prev) => [...prev, newTransaction]);
+    if (newTransaction.type === "pemasukan") {
+      setPemasukan((prev) => prev + newTransaction.amount);
+    } else if (newTransaction.type === "pengeluaran") {
+      setPengeluaran((prev) => prev + newTransaction.amount);
+    }
   };
 
-  // ❌ Hapus transaksi berdasarkan ID
   const handleDeleteTransaction = (id) => {
     const updated = transactions.filter((t) => t.id !== id);
     setTransactions(updated);
@@ -31,6 +51,24 @@ function TransactionForm() {
 
   return (
     <div className="p-4 max-w-xl mx-auto">
+      <div className="flex items-center justify-center">
+        <Link to="/" className="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+            />
+          </svg>
+        </Link>
+      </div>
       <Form onAddTransaction={handleAddTransaction} />
       <TransactionList
         transactions={transactions}
@@ -41,3 +79,4 @@ function TransactionForm() {
 }
 
 export default TransactionForm;
+
