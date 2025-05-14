@@ -1,16 +1,38 @@
-import { Link } from 'react-router-dom';
+import { useState, useEffect } from "react";
+import Form from "./Form";
 
-function App () {
+function App() {
+  const [transactions, setTransactions] = useState([]);
+
+  // Ambil data dari localStorage saat pertama kali dimuat
+  useEffect(() => {
+    const savedTransactions = localStorage.getItem("transactions");
+    if (savedTransactions) {
+      setTransactions(JSON.parse(savedTransactions));
+    }
+  }, []);
+
+  // Simpan ke localStorage setiap kali transaksi berubah
+  useEffect(() => {
+    localStorage.setItem("transactions", JSON.stringify(transactions));
+  }, [transactions]);
+
+  const handleAddTransaction = (transaction) => {
+    setTransactions((prev) => [...prev, transaction]);
+  };
+
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center">
-      <h1 className="text-6xl font-bold">Finance Tracker</h1>
-      <p className="text-2xl">Welcome to the Finance Tracker App!</p>
-      <div className="mt-8 space-x-4">
-        <Link to="/form" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Do Transactions</Link>
-        <Link to="/summary" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Summary</Link>
-        <Link to="/transactions" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Transactions List</Link>
-      </div>
+    <div className="p-4">
+      <Form onAddTransaction={handleAddTransaction} />
+      <ul className="mt-6 space-y-2">
+        {transactions.map((t) => (
+          <li key={t.id} className="border p-2 rounded shadow">
+            {t.description} - Rp{t.amount.toLocaleString()} ({t.type})
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
+
 export default App;
